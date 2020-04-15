@@ -79,7 +79,7 @@ int main(){
 
 
 	//to read top element 
-	cout << " Top element" << endl;
+	cout << "Top element" << endl;
 	cout << s.top() << endl;
 
 
