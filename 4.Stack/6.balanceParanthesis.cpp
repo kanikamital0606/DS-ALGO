@@ -22,7 +22,7 @@ bool checkBalanced(char *exp){
 				return false;
 			}
 
-			//top should be equal to starting bracket
+			//top should be equal to starting bracket here ch = top 
 			char ch = s.top();
 			s.pop();
 
