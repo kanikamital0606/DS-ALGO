@@ -25,4 +25,3 @@ int main(){
 	cout << "Total size = "<< q.getSize() << endl;
 
 	cout << "queue is empty or not " << q.isEmpty() << endl;
-}
