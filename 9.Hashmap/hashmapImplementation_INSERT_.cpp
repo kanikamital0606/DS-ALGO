@@ -29,6 +29,7 @@ class ourmap{
 	//array which is head of linklist  
 	mapNode<V>** buckets;
 	int size;
+	//int count;
 	int numBuckets;
 public:
 	ourmap(){
@@ -58,7 +59,7 @@ public:
 
 	// Function 2
 	V getValue(string key) {
-		int bucketIndex = getBucketIndex(string key);
+		int bucketIndex = getBucketIndex(key);
 		mapNode<V>* head = buckets[bucketIndex];
 		while (head != NULL) {
 			if (head->key == key) {
@@ -87,11 +88,50 @@ private:
 
 		return hashCode % numBuckets;
 	}
+
+	void rehash(){
+		mapNode<V>** temp = buckets;
+		buckets = new mapNode<V>[2* numBuckets]; //increase size 
+
+		//remove garbage i.e empty array
+		for (int i = 0; i < 2*numBuckets; i++)
+		{
+			buckets[i] = NULL; 
+		}
+		int oldBucketsCount = numBuckets;
+		numBuckets *=2;
+		count = 0;   //behaving as an empty map
+
+		for (int i = 0; i < oldBucketsCount; i++)
+		{
+			mapNode<V>* head = temp[i];
+
+			while(head != NULL){
+
+				string key = head-> key;
+				V value = head -> value;
+				insert(key, value);
+				head = head->next;
+			}
+		}
+		//delete old
+		for (int i = 0; i < oldBucketsCount; i++){
+
+			mapNode<V>* head = temp[i];
+			delete head;
+		}
+		delete []temp;
+	}
+
+	public: //
+	double getLoadFactor(){
+		return (1.0* count / numBuckets);
+	}
 //////////////////////////////insert 
 public:
 	void insert(string key, V value) {
 
-		int bucketIndex = getBucketIndex(string key);
+		int bucketIndex = getBucketIndex(key);
 		mapNode<V>* head = buckets[bucketIndex];
 		while (head != NULL) {
 			if (head->key == key) {
@@ -104,7 +144,15 @@ public:
 		mapNode<V>* node = new mapNode<V>(key, value);
 		node->next = head;
 		buckets[bucketIndex] = node;
-		count++;
+		count ++;
+
+		//////////////loadFactor
+		double loadFactor = (1.0*count/numBuckets); //1.0 multiplied to get exact in points which we were not getting  int/int;
+
+		if (loadFactor >0.7){
+			//rehashing
+			rehash(); 
+		}
 	}
 
 	///////////////////////////////remove || DELETE
@@ -137,3 +185,33 @@ public:
 		return 0;
 	}
 };
+
+int main(){
+	ourmap<int>map;
+	for (int i = 0; i < 10; i++){
+		char c = '0' +i;
+		string key = "abc";
+		key = key+c;
+		int value = i+1;
+		map.insert(key, value);
+		cout << map.getLoadFactor() << endl;
+	}
+
+
+	cout << map.size() << endl;
+	map.remove("abc2");
+	map.remove("abc7");
+
+	cout << map.size() << endl;
+	for (int i = 0; i < 10; i++){
+		char c = '0' +i;
+		string key = "abc";
+		key = key+c;
+		cout << key << ":" << map.size() << endl;
+
+	}
+
+	cout << map.size() << endl;
+	
+
+}
