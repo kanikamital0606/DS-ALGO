@@ -1,14 +1,35 @@
-/*import java.io.*;
-import java.util.*;
+#include <iostream>
+using namespace std;
 
-public class Main {
+int lastIndex(int arr[], int size, int idx, int x){
+	//base case
+	if(idx== size){
+		return -1;
+	}
+	int lssi = lastIndex(arr,size,idx+1,x); //reursion till last 
+	if(lssi!= -1){
+		return lssi;
+	}
+	else if(arr[idx]==x){
+		return idx;
+	}
+	else{
+		return -1;
+	}
+}
+int main(){
+	int size ;
+	cin >> size;
 
-    public static void main(String[] args) throws Exception {
-        // write your code here
-    }
+	int arr[100000];
+	for(int i=0; i<size; i++){
+		cin >> arr[i];
+	}
+	int x;
+	cin >> x;
 
-    public static int lastIndex(int[] arr, int idx, int x){
-        return 0;
-    }
-
-}*/
+	int di=lastIndex(arr, size, 0, x);
+	cout << di;
+	/* code */
+	return 0;
+}
